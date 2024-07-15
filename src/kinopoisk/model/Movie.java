@@ -1,6 +1,7 @@
 package kinopoisk.model;
 
 import kinopoisk.model.enums.AwardEnum;
+import java.util.ArrayList;
 
 public class Movie implements Cloneable {
     private String titleFilm; //название фильма
