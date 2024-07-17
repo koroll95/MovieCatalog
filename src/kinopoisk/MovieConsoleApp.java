@@ -4,13 +4,14 @@ import kinopoisk.model.Directer;
 import kinopoisk.model.Movie;
 import kinopoisk.storage.BannedMovieStorage;
 import kinopoisk.storage.MovieStorage;
+
 import java.util.Scanner;
 
 public class MovieConsoleApp {
     private BannedMovieStorage bannedMovieStorage;
     private MovieStorage movieStorage;
 
-    public MovieConsoleApp(BannedMovieStorage bannedMovieStorage, MovieStorage movieStorage) {
+     public MovieConsoleApp(BannedMovieStorage bannedMovieStorage, MovieStorage movieStorage) {
         this.bannedMovieStorage = bannedMovieStorage;
         this.movieStorage = movieStorage;
     }
