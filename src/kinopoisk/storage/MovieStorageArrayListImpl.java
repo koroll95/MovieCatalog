@@ -18,13 +18,15 @@ public class MovieStorageArrayListImpl implements MovieStorage {
     @Override
     public Movie[] getAll() {
         Movie[] moviesArray = new Movie[movies.size()];
-        moviesArray = movies.toArray(moviesArray);
-        return moviesArray.clone();
+        for (int i = 0; i < movies.size(); i++) {
+            moviesArray[i] = movies.get(i).clone();
+        }
+        return moviesArray;
     }
 
     @Override
     public Movie getById(int id) {
-        if (id >= movies.size()) {
+        if (id >= movies.size() || id < 0) {
             throw new RuntimeException("ID с данным фильмом НЕТ!");
         }
         return movies.get(id).clone();
@@ -34,7 +36,9 @@ public class MovieStorageArrayListImpl implements MovieStorage {
     public void deleteById(int id) {
         if (id >= movies.size()) {
             throw new RuntimeException("ID с данным фильмом НЕТ! Ничего не удаляем");
-        } else movies.remove(id);
+        } else {
+            movies.remove(id);
+        }
     }
 
     @Override

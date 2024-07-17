@@ -1,6 +1,6 @@
 package kinopoisk.model;
 
-public class Person {
-    private String name;
-    private short age;
+public abstract class Person {
+    private String name; //имя
+    private short age; //возраст
 }

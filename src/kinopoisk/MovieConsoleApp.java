@@ -4,24 +4,16 @@ import kinopoisk.model.Directer;
 import kinopoisk.model.Movie;
 import kinopoisk.storage.BannedMovieStorage;
 import kinopoisk.storage.MovieStorage;
-import kinopoisk.storage.MovieStorageArrayListImpl;
-import kinopoisk.storage.BannedMovieStorageListImpl;
+
 import java.util.Scanner;
 
 public class MovieConsoleApp {
     private BannedMovieStorage bannedMovieStorage;
-    private BannedMovieStorageListImpl bannedMovieStorageListImpl;
     private MovieStorage movieStorage;
-    private MovieStorageArrayListImpl movieStorageArrayListImpl;
 
-    //public MovieConsoleApp(BannedMovieStorage bannedMovieStorage, MovieStorage movieStorage) {
-        //this.bannedMovieStorage = bannedMovieStorage;
-        //this.movieStorage = movieStorage;
-   // }
-
-    public MovieConsoleApp(BannedMovieStorageListImpl bannedMovieStorageListImpl, MovieStorageArrayListImpl movieStorageArrayListImpl) {
-        this.bannedMovieStorageListImpl = bannedMovieStorageListImpl;
-        this.movieStorageArrayListImpl = movieStorageArrayListImpl;
+     public MovieConsoleApp(BannedMovieStorage bannedMovieStorage, MovieStorage movieStorage) {
+        this.bannedMovieStorage = bannedMovieStorage;
+        this.movieStorage = movieStorage;
     }
 
     public void run() throws Exception {
@@ -53,8 +45,7 @@ public class MovieConsoleApp {
                     printFilms();
                     System.out.println("Введите данные нового фильма. ");
 
-                    //String[] bannedFilmsAdd = bannedMovieStorage.getAll();
-                    String[] bannedFilmsAdd = bannedMovieStorageListImpl.getAll();
+                    String[] bannedFilmsAdd = bannedMovieStorage.getAll();
 
                     System.out.print("Введите название фильма: ");
                     String titleApp = scanner.nextLine();
@@ -74,8 +65,7 @@ public class MovieConsoleApp {
                     Short directedAge = scanner.nextShort();
                     Directer directer = new Directer(directedName, directedAge);
                     Movie myFilmApp = new Movie(titleApp, releaseApp, runningApp, directer);
-                    //movieStorage.add(myFilmApp);
-                    movieStorageArrayListImpl.add(myFilmApp);
+                    movieStorage.add(myFilmApp);
                     System.out.println("Новый список фильмов: ");
                     printFilms();
                     break;
@@ -86,8 +76,7 @@ public class MovieConsoleApp {
                     System.out.print("Введите номер фильма который хотите изменить: ");
                     int id = sc.nextInt();
                     sc.nextLine();
-                    //String[] bannedListFilms = bannedMovieStorage.getAll();
-                    String[] bannedListFilms = bannedMovieStorageListImpl.getAll();
+                    String[] bannedListFilms = bannedMovieStorage.getAll();
 
 
                     System.out.print("Введите новое название фильма: ");
@@ -113,8 +102,7 @@ public class MovieConsoleApp {
 
                     Directer updatedDirecter = new Directer(updatedDirectedName, updatedDirectedAge);
                     Movie myFilmsUpdate = new Movie(title, release, running, updatedDirecter);
-                   //movieStorage.updateById(id, myFilmsUpdate);
-                    movieStorageArrayListImpl.updateById(id, myFilmsUpdate);
+                    movieStorage.updateById(id, myFilmsUpdate);
 
                     System.out.println("Новый список фильмов: ");
                     printFilms();
@@ -132,8 +120,7 @@ public class MovieConsoleApp {
                     System.out.print("Выберете фильм, который хотите удалить: ");
                     id = sc.nextInt();
                     try {
-                        //movieStorage.deleteById(id);
-                        movieStorageArrayListImpl.deleteById(id);
+                        movieStorage.deleteById(id);
                     } catch (RuntimeException exc) {
                         System.out.println(exc.getMessage());
                     }
@@ -143,11 +130,9 @@ public class MovieConsoleApp {
                 case 6:
                     System.out.println("Вы выбрали вывести фильм по ID");
                     System.out.print("Выберите ID фильма, который хотите вывести: ");
-                    //Movie[] myFilmId = movieStorage.getAll();
-                    Movie[] myFilmId = movieStorageArrayListImpl.getAll();
+                    Movie[] myFilmId = movieStorage.getAll();
                     try {
-                        //movieStorage.getById(id = sc.nextInt());
-                        movieStorageArrayListImpl.getById(id = sc.nextInt());
+                        movieStorage.getById(id = sc.nextInt());
                         System.out.println(myFilmId[id]);
                     } catch (RuntimeException exc) {
                         System.out.println(exc.getMessage());
@@ -160,18 +145,15 @@ public class MovieConsoleApp {
                     printBannedFilms();
                     System.out.println("Введите новый забаненный фильм:");
                     String bannedFilmNew = ban.nextLine();
-                    //Movie[] myFilms = movieStorage.getAll();
-                    Movie[] myFilms = movieStorageArrayListImpl.getAll();
+                    Movie[] myFilms = movieStorage.getAll();
 
                     for (int i = 0; i < myFilms.length; i++) {
                         if (myFilms[i].getTitleFilm().equals(bannedFilmNew)) {
-                            //movieStorage.deleteById(i);
-                            movieStorageArrayListImpl.deleteById(i);
+                            movieStorage.deleteById(i);
                             System.out.println("Такой фильм есть в базе фильмов, поэтому его удаляем!");
                         }
                     }
-                    //bannedMovieStorage.add(bannedFilmNew);
-                    bannedMovieStorageListImpl.add(bannedFilmNew);
+                    bannedMovieStorage.add(bannedFilmNew);
 
                     System.out.println("Новый список фильмов в бане");
                     printBannedFilms();
@@ -190,8 +172,7 @@ public class MovieConsoleApp {
 
 
     private void printFilms() { //метод вывода фильмов
-        //Movie[] myFilms = movieStorage.getAll();
-        Movie[] myFilms = movieStorageArrayListImpl.getAll();
+        Movie[] myFilms = movieStorage.getAll();
         for (int i = 0; i < myFilms.length; i++) {
             System.out.println("ID фильма: " + i + " | " + myFilms[i]);
         }
@@ -199,8 +180,7 @@ public class MovieConsoleApp {
 
 
     private void printBannedFilms() { //метод вывода фильмов в бане
-        //String[] bannedMovieNames = bannedMovieStorage.getAll();
-        String[] bannedMovieNames = bannedMovieStorageListImpl.getAll();
+        String[] bannedMovieNames = bannedMovieStorage.getAll();
         for (int i = 0; i < bannedMovieNames.length; i++) {
             if (bannedMovieNames[i] != null) {
                 System.out.println("Назввание забаненного фильма: " + bannedMovieNames[i]);
@@ -209,8 +189,7 @@ public class MovieConsoleApp {
     }
 
     private void searchLongRunningFilms() { //метод поиска самого продолжительного фильма
-        //Movie[] myFilms = movieStorage.getAll();
-        Movie[] myFilms = movieStorageArrayListImpl.getAll();
+        Movie[] myFilms = movieStorage.getAll();
         int maxRunning = 0;
         for (int i = 0; i < myFilms.length; i++) {
             if (myFilms[i].getRunningTime() > maxRunning) {
