@@ -5,13 +5,15 @@ import kinopoisk.model.Movie;
 import kinopoisk.storage.BannedMovieStorage;
 import kinopoisk.storage.MovieStorage;
 
+import java.io.IOException;
+import java.util.Properties;
 import java.util.Scanner;
 
 public class MovieConsoleApp {
     private BannedMovieStorage bannedMovieStorage;
     private MovieStorage movieStorage;
 
-     public MovieConsoleApp(BannedMovieStorage bannedMovieStorage, MovieStorage movieStorage) {
+    public MovieConsoleApp(BannedMovieStorage bannedMovieStorage, MovieStorage movieStorage) {
         this.bannedMovieStorage = bannedMovieStorage;
         this.movieStorage = movieStorage;
     }
@@ -38,37 +40,37 @@ public class MovieConsoleApp {
                     System.out.println("Список всех фильмов");
                     printFilms();
                     break;
-                case 2:
+                case 2: {
                     Scanner scanner = new Scanner(System.in);
                     System.out.println("Вы выбрали добавить новый фильм.");
                     System.out.println("Список имеющихся фильмов:");
                     printFilms();
                     System.out.println("Введите данные нового фильма. ");
 
-                    String[] bannedFilmsAdd = bannedMovieStorage.getAll();
-
                     System.out.print("Введите название фильма: ");
-                    String titleApp = scanner.nextLine();
-                    for (int i = 0; i < bannedFilmsAdd.length; i++) {
-                        if (titleApp.equals(bannedFilmsAdd[i])) {
-                            throw new Exception("Фильм в запретной базе");
-                        }
-                    }
+                    String title = scanner.nextLine();
+                    checkBannedFilms(title);
+
                     System.out.print("Введите дату выхода фильма: ");
-                    int releaseApp = scanner.nextInt();
+                    int release = scanner.nextInt();
+
                     System.out.print("Введите продолжительность фильма: ");
-                    int runningApp = scanner.nextInt();
+                    int running = scanner.nextInt();
+
                     System.out.print("Введите имя режиссера фильма: ");
                     String directedName = scanner.nextLine();
                     scanner.nextLine();
+
                     System.out.println("Введите возраст режиссера: ");
                     Short directedAge = scanner.nextShort();
                     Directer directer = new Directer(directedName, directedAge);
-                    Movie myFilmApp = new Movie(titleApp, releaseApp, runningApp, directer);
-                    movieStorage.add(myFilmApp);
+                    Movie myFilm = new Movie(title, release, running, directer);
+                    movieStorage.add(myFilm);
                     System.out.println("Новый список фильмов: ");
                     printFilms();
                     break;
+                }
+
                 case 3:
                     System.out.println("Вы выбрали изменить фильм");
                     System.out.println("Начальный список фильмов");
@@ -76,16 +78,10 @@ public class MovieConsoleApp {
                     System.out.print("Введите номер фильма который хотите изменить: ");
                     int id = sc.nextInt();
                     sc.nextLine();
-                    String[] bannedListFilms = bannedMovieStorage.getAll();
-
 
                     System.out.print("Введите новое название фильма: ");
                     String title = sc.nextLine();
-                    for (int i = 0; i < bannedListFilms.length; i++) {
-                        if (title.equals(bannedListFilms[i])) {
-                            throw new Exception("Фильм в запретной базе");
-                        }
-                    }
+                    checkBannedFilms(title);
 
                     System.out.print("Введите новую дату выхода фильма: ");
                     int release = sc.nextInt();
@@ -127,17 +123,18 @@ public class MovieConsoleApp {
                     System.out.println("Список фильмов после удаления");
                     printFilms();
                     break;
-                case 6:
+                case 6: {
                     System.out.println("Вы выбрали вывести фильм по ID");
                     System.out.print("Выберите ID фильма, который хотите вывести: ");
-                    Movie[] myFilmId = movieStorage.getAll();
+                    Movie[] myFilms = movieStorage.getAll();
                     try {
                         movieStorage.getById(id = sc.nextInt());
-                        System.out.println(myFilmId[id]);
+                        System.out.println(myFilms[id]);
                     } catch (RuntimeException exc) {
                         System.out.println(exc.getMessage());
                     }
                     break;
+                }
                 case 7:
                     Scanner ban = new Scanner(System.in);
                     System.out.println("Вы выбрали добавить фильм в базу забаненных.");
@@ -171,15 +168,26 @@ public class MovieConsoleApp {
     }
 
 
-    private void printFilms() { //метод вывода фильмов
+    private void printFilms() throws IOException, ClassNotFoundException { //метод вывода фильмов
         Movie[] myFilms = movieStorage.getAll();
         for (int i = 0; i < myFilms.length; i++) {
             System.out.println("ID фильма: " + i + " | " + myFilms[i]);
         }
     }
 
+    private void checkBannedFilms(String title) throws Exception{//метод проверки фильма на находжении в базе забаненных
+        String[] bannedFilms = bannedMovieStorage.getAll();
 
-    private void printBannedFilms() { //метод вывода фильмов в бане
+        for (int i = 0; i < bannedFilms.length; i++) {
+            if (title.equals(bannedFilms[i])) {
+                throw new Exception("Фильм в запретной базе");
+            }
+        }
+
+    }
+
+
+    private void printBannedFilms() throws IOException, ClassNotFoundException { //метод вывода фильмов в бане
         String[] bannedMovieNames = bannedMovieStorage.getAll();
         for (int i = 0; i < bannedMovieNames.length; i++) {
             if (bannedMovieNames[i] != null) {
@@ -188,7 +196,7 @@ public class MovieConsoleApp {
         }
     }
 
-    private void searchLongRunningFilms() { //метод поиска самого продолжительного фильма
+    private void searchLongRunningFilms() throws IOException, ClassNotFoundException { //метод поиска самого продолжительного фильма
         Movie[] myFilms = movieStorage.getAll();
         int maxRunning = 0;
         for (int i = 0; i < myFilms.length; i++) {

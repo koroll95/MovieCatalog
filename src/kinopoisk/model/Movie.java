@@ -2,7 +2,9 @@ package kinopoisk.model;
 
 import kinopoisk.model.enums.AwardEnum;
 
-public class Movie implements Cloneable {
+import java.io.Serializable;
+
+public class Movie implements Cloneable, Serializable {
     private String titleFilm; //название фильма
     private int releaseDates; //дата выхода
     private int runningTime; //продолжительность фильма
