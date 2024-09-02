@@ -1,29 +1,27 @@
 package kinopoisk.storage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BannedMovieStorageListImpl implements BannedMovieStorage {
 
-    private static ArrayList<String> bannedMovieNames = new ArrayList();
-
-    static {
-        bannedMovieNames.add("boroda");
-        bannedMovieNames.add("Liga champions");
-        bannedMovieNames.add("9 rota");
-        bannedMovieNames.add("Penis");
-        bannedMovieNames.add("aaa");
-    }
+    private static final List<String> BANNED_MOVIE_NAMES = new ArrayList<>() {{
+        add("boroda");
+        add("Liga champions");
+        add("9 rota");
+        add("Penis");
+        add("aaa");
+    }};
 
     @Override
     public void add(String bannedMovie) {
-        bannedMovieNames.add(bannedMovie);
-
+        BANNED_MOVIE_NAMES.add(bannedMovie);
     }
 
     @Override
     public String[] getAll() {
-        String[] bannedMovieNamesArray = new String[bannedMovieNames.size()];
-        bannedMovieNamesArray = bannedMovieNames.toArray(bannedMovieNamesArray);
-        return bannedMovieNamesArray.clone();
+        String[] bannedMovieNamesArray = new String[BANNED_MOVIE_NAMES.size()];
+        bannedMovieNamesArray = BANNED_MOVIE_NAMES.toArray(bannedMovieNamesArray);
+        return bannedMovieNamesArray;
     }
 }

@@ -1,9 +1,12 @@
 package kinopoisk.storage;
 
-public interface BannedMovieStorage {
-    void add(String bannedMovie);
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
-    String[] getAll();
+public interface BannedMovieStorage {
+    void add(String bannedMovie) throws IOException, ClassNotFoundException;
+
+    String[] getAll() throws IOException, ClassNotFoundException;
 
     /*Чтобы решить эту проблему, необходимо создать экземпляр класса и вызвать на нем метод myMethod(). Вот исправленный код:
     public class MyClass {
